@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i58 · 6-Month Check-In — Facilitator Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+  :root {
+    --indigo: #1C476A;
+    --terracotta: #C96C39;
+    --slate: #657C96;
+    --taupe: #AE9372;
+    --aqua: #ABDADC;
+    --sand: #EAD6B5;
+    --offwhite: #F1F1EF;
+    --palesky: #E6EDF2;
+    --dark: #2C2C2C;
+    --midgray: #C8C8C4;
+    --lightgray: #E9E9E9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10.5pt;
+    color: var(--dark);
+    background: white;
+    line-height: 1.5;
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { font-size: 9.5pt; }
+    .no-print { display: none !important; }
+    .page { page-break-after: always; padding: 0.6in 0.75in; }
+    .page:last-child { page-break-after: avoid; }
+    input[type="text"], textarea {
+      border: none !important;
+      border-bottom: 1px solid #999 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .section-bar, .tip-header, .skip-box, .action-header {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+
+  /* ── SCREEN ── */
+  .container { max-width: 820px; margin: 0 auto; padding: 20px; }
+
+  /* Save to Drive button */
+  .toolbar {
+    background: var(--indigo);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .toolbar-title {
+    color: white;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+  .toolbar-btns { display: flex; gap: 8px; }
+  .btn {
+    padding: 7px 16px;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary { background: var(--terracotta); color: white; }
+  .btn-secondary { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+  .btn:hover { opacity: 0.88; }
+
+  /* ── COVER ── */
+  .cover {
+    min-height: 96vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 72px;
+    border-bottom: 4px solid var(--indigo);
+  }
+  .cover-org {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--slate);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .cover-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--indigo);
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .cover-sub {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--terracotta);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  .cover-rule {
+    border: none;
+    border-top: 1px solid var(--aqua);
+    margin: 24px 0;
+  }
+  .cover-confidential {
+    font-size: 11px;
+    color: var(--slate);
+    font-style: italic;
+    margin-bottom: 52px;
+    text-align: center;
+  }
+  .cover-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+  .cover-field label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--indigo);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .cover-field input {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid var(--midgray);
+    padding: 4px 0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: var(--dark);
+    background: transparent;
+    outline: none;
+  }
+  .cover-field input:focus { border-bottom-color: var(--indigo); }
+
+  /* ── CONTENT PAGE ── */
+  .page { padding: 40px 72px; }
+
+  /* Section bar */
+  .section-bar {
+    display: flex;
+    align-items: stretch;
+    margin: 32px 0 16px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .section-bar-accent { width: 5px; background: var(--indigo); flex-shrink: 0; }
+  .section-bar-body {
+    background: var(--offwhite);
+    padding: 10px 16px;
+    flex: 1;
+  }
+  .section-bar-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--slate);
+    text-transform: uppercase;
+  }
+  .section-bar-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+  .section-bar.terracotta .section-bar-accent { background: var(--terracotta); }
+  .section-bar.terracotta .section-bar-title { color: var(--terracotta); }
+  .section-bar.taupe .section-bar-accent { background: var(--taupe); }
+  .section-bar.taupe .section-bar-title { color: var(--taupe); }
+  .section-bar.indigo .section-bar-title { color: var(--indigo); }
+
+  /* Sub label */
+  .sub-label {
+    display: flex;
+    align-items: stretch;
+    margin: 20px 0 6px;
+  }
+  .sub-label-bar { width: 3px; background: var(--indigo); flex-shrink: 0; border-radius: 2px; }
+  .sub-label-text {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--indigo);
+    padding: 2px 10px;
+  }
+  .sub-label.terracotta .sub-label-bar { background: var(--terracotta); }
+  .sub-label.terracotta .sub-label-text { color: var(--terracotta); }
+  .sub-label.slate .sub-label-bar { background: var(--slate); }
+  .sub-label.slate .sub-label-text { color: var(--slate); }
+  .sub-label.taupe .sub-label-bar { background: var(--taupe); }
+  .sub-label.taupe .sub-label-text { color: var(--taupe); }
+  .sub-label.aqua .sub-label-bar { background: #6BBABF; }
+  .sub-label.aqua .sub-label-text { color: #3a8a8e; }
+
+  /* Italic note */
+  .note {
+    font-style: italic;
+    font-size: 10px;
+    color: var(--slate);
+    margin: 4px 0 10px;
+    padding-left: 2px;
+  }
+
+  /* Question block */
+  .question {
+    margin: 12px 0 4px;
+  }
+  .question-row {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    margin-bottom: 2px;
+  }
+  .q-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--terracotta);
+    flex-shrink: 0;
+    min-width: 18px;
+  }
+  .q-text {
+    font-size: 10.5px;
+    color: var(--dark);
+    line-height: 1.4;
+  }
+  .q-facilitator-note {
+    font-size: 9.5px;
+    font-style: italic;
+    color: var(--slate);
+    padding-left: 26px;
+    margin-bottom: 4px;
+  }
+  .q-facilitator-note::before { content: "➝ "; }
+
+  /* Note lines */
+  .note-lines { padding-left: 4px; }
+  .note-line {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--midgray);
+    padding: 5px 2px;
+    margin-bottom: 6px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    color: var(--dark);
+    background: transparent;
+    outline: none;
+    display: block;
+  }
+  .note-line:focus { border-bottom-color: var(--indigo); }
+
+  /* Tip box */
+  .tip-box { margin: 16px 0; border-radius: 2px; overflow: hidden; border-left: 3px solid var(--indigo); }
+  .tip-header {
+    background: var(--palesky);
+    padding: 8px 14px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--indigo);
+    border-bottom: 1px solid #c8d8e4;
+  }
+  .tip-item {
+    padding: 6px 14px;
+    font-size: 10px;
+    color: var(--dark);
+    border-bottom: 1px solid var(--lightgray);
+    line-height: 1.4;
+  }
+  .tip-item:nth-child(odd) { background: var(--offwhite); }
+  .tip-item:nth-child(even) { background: white; }
+  .tip-item:last-child { border-bottom: none; }
+  .tip-item::before { content: "• "; color: var(--slate); }
+
+  /* Divider */
+  .divider { border: none; border-top: 1px solid var(--midgray); margin: 28px 0; }
+  .divider.strong { border-top: 2px solid var(--indigo); }
+
+  /* Action box */
+  .action-box { border: 1.5px solid var(--terracotta); border-radius: 3px; overflow: hidden; margin: 20px 0; }
+  .action-header {
+    background: #FEF3EC;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--terracotta);
+  }
+  .action-body { padding: 14px 16px; }
+  .action-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--indigo);
+    letter-spacing: 0.05em;
+    margin: 10px 0 6px;
+  }
+  .action-section-label:first-child { margin-top: 0; }
+  .action-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .action-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--terracotta);
+    flex-shrink: 0;
+  }
+  .action-input {
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid var(--midgray);
+    padding: 4px 0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    color: var(--dark);
+    background: transparent;
+    outline: none;
+  }
+  .action-input:focus { border-bottom-color: var(--indigo); }
+  .action-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px; }
+  .action-meta-field label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--slate);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .action-meta-field input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--midgray);
+    padding: 3px 0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    background: transparent;
+    outline: none;
+  }
+
+  /* Skip box */
+  .skip-box {
+    border: 1.5px dashed var(--taupe);
+    border-radius: 3px;
+    background: #FAF5EF;
+    padding: 10px 14px;
+    margin: 14px 0;
+    font-size: 10px;
+    color: var(--slate);
+    font-style: italic;
+  }
+  .skip-box strong { color: var(--taupe); font-style: normal; }
+
+  /* Intro box */
+  .intro-box {
+    border-left: 4px solid var(--indigo);
+    border-top: 1px solid #bed0de;
+    border-bottom: 1px solid #bed0de;
+    background: var(--palesky);
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    border-radius: 0 3px 3px 0;
+  }
+  .intro-box h2 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 14px;
+    color: var(--indigo);
+    margin-bottom: 8px;
+  }
+  .intro-box p {
+    font-size: 10.5px;
+    color: var(--dark);
+    margin-bottom: 8px;
+    line-height: 1.55;
+  }
+  .intro-box p:last-child { margin-bottom: 0; }
+  .intro-box em { color: var(--slate); }
+
+  .page-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 22px;
+    color: var(--indigo);
+    margin-bottom: 4px;
+    padding-top: 8px;
+  }
+  .page-rule { border: none; border-bottom: 2px solid var(--aqua); margin: 6px 0 20px; }
+
+  .private-notes-label {
+    font-size: 10px;
+    font-style: italic;
+    color: var(--slate);
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  textarea.note-area {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--midgray);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    color: var(--dark);
+    background: transparent;
+    resize: none;
+    outline: none;
+    line-height: 2.2;
+    display: block;
+    margin-bottom: 4px;
+    padding: 0 2px;
+  }
+  textarea.note-area:focus { border-bottom-color: var(--indigo); }
+</style>
+</head>
+<body>
+
+<!-- Toolbar (screen only) -->
+<div class="toolbar no-print">
+  <span class="toolbar-title">i58 · 6-Month Check-In — Facilitator Guide</span>
+  <div class="toolbar-btns">
+    <button class="btn btn-secondary" onclick="window.print()">🖨 Print</button>
+  </div>
+</div>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-org">i58 Germany</div>
+  <div class="cover-title">6-Month Volunteer<br>Check-In</div>
+  <div class="cover-sub">Facilitator Guide</div>
+  <hr class="cover-rule">
+  <div class="cover-confidential">For internal use only · Confidential</div>
+  <div class="cover-fields">
+    <div class="cover-field" style="grid-column: 1 / -1;">
+      <label>Volunteer Name</label>
+      <input type="text" placeholder="Full name">
+    </div>
+    <div class="cover-field">
+      <label>Check-In Date</label>
+      <input type="text" placeholder="DD / MM / YYYY">
+    </div>
+    <div class="cover-field">
+      <label>Period Covered</label>
+      <input type="text" placeholder="e.g. Oct 2024 – Apr 2025">
+    </div>
+    <div class="cover-field" style="grid-column: 1 / -1;">
+      <label>Facilitator</label>
+      <input type="text" placeholder="Name">
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 1 — Purpose + Section 1 -->
+<div class="page">
+  <div class="page-title">Purpose & Philosophy</div>
+  <hr class="page-rule">
+
+  <div class="intro-box">
+    <p>This is a <strong>pastoral conversation, not a performance review.</strong> You are here to see the whole person — their heart, their struggles, their growth, and how we can better support them. Come with genuine curiosity and care, not a checklist mentality.</p>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-header">Before You Begin — Facilitator Reminders</div>
+    <div class="tip-item">Pray before the meeting. Ask for wisdom, discernment, and genuine care for this person.</div>
+    <div class="tip-item">Review their pre-meeting worksheet before you sit down together.</div>
+    <div class="tip-item">Choose a private, comfortable space. Budget 60–90 minutes.</div>
+    <div class="tip-item">Listen more than you talk. Silence is okay — let them process.</div>
+    <div class="tip-item">Take notes directly in this guide, but don't let note-taking interrupt presence.</div>
+    <div class="tip-item">Follow the Spirit, not the script — let the conversation breathe.</div>
+    <div class="tip-item">Close the loop: follow up on every commitment you make.</div>
+  </div>
+
+  <hr class="divider strong">
+
+  <!-- SECTION 1 -->
+  <div class="section-bar indigo">
+    <div class="section-bar-accent"></div>
+    <div class="section-bar-body">
+      <div class="section-bar-label">Section 1</div>
+      <div class="section-bar-title">Team Care</div>
+    </div>
+  </div>
+  <div class="note">Start here. This section builds trust and gets them talking openly before more structured topics.</div>
+
+  <div class="sub-label">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">Opening — How Are You, Really?</div>
+  </div>
+  <div class="note">Give them space beyond 'fine.' If they give a surface answer, gently push: "What does that look like day to day?"</div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">1.</span><span class="q-text">How have the last 6 months been for you overall — the highs and the lows?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">2.</span><span class="q-text">What has felt most life-giving in this season?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">3.</span><span class="q-text">What has been unexpectedly hard or draining?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <div class="sub-label slate">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">Emotional & Spiritual Wellbeing</div>
+  </div>
+  <div class="note">Watch for signs of burnout, compassion fatigue, or isolation.</div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">4.</span><span class="q-text">How is your soul? Are you spiritually nourished, or running dry?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">5.</span><span class="q-text">Are you finding rhythms of rest here in Germany?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">6.</span><span class="q-text">Is there anything you've been carrying that you haven't had space to process?</span></div>
+    <div class="q-facilitator-note">Normalize this. Many volunteers carry more than they let on.</div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <div class="sub-label taupe">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">Team Dynamics</div>
+  </div>
+  <div class="note">Explore both the positives and any tensions — don't only fish for problems.</div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">7.</span><span class="q-text">What has been most encouraging or strengthening about the team in this season?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">8.</span><span class="q-text">How would you describe the team culture right now?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">9.</span><span class="q-text">Do you feel like you belong — known and not just functional?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">10.</span><span class="q-text">Are there any relational tensions sitting with you that haven't been addressed?</span></div>
+    <div class="q-facilitator-note">If yes: "Have you been able to speak to it directly? How can we help?"</div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 2 -->
+  <div class="section-bar terracotta">
+    <div class="section-bar-accent"></div>
+    <div class="section-bar-body">
+      <div class="section-bar-label">Section 2</div>
+      <div class="section-bar-title">Role & Fit</div>
+    </div>
+  </div>
+  <div class="note">We want every volunteer in a role where they can thrive. This section is about clarity and alignment.</div>
+
+  <div class="sub-label terracotta">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">Role Clarity & Fit</div>
+  </div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">1.</span><span class="q-text">How would you describe your current role? Does the description match the reality?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">2.</span><span class="q-text">What parts of your role feel most natural and energizing?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">3.</span><span class="q-text">What parts consistently feel like a poor fit or drain you?</span></div>
+    <div class="q-facilitator-note">Distinguish between healthy stretching and genuine misalignment.</div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">4.</span><span class="q-text">Are there gifts or strengths you feel are underused right now?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">5.</span><span class="q-text">If you could reshape your role in any way, what would you change?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <div class="sub-label slate">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">Commitment & Engagement</div>
+  </div>
+  <div class="note">If this person has a committed term end date, affirm it — this section is about engagement within that timeline, not pressure to extend.</div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">6.</span><span class="q-text">Within your current commitment, how are you feeling about your engagement and sense of purpose?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">7.</span><span class="q-text">Has anything shifted in your sense of calling or direction in the last 6 months?</span></div>
+    <div class="q-facilitator-note">Listen for uncertainty or drift — but also for renewed clarity.</div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">8.</span><span class="q-text">Is there anything that would make your remaining time more sustainable or meaningful?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 3 -->
+  <div class="section-bar taupe">
+    <div class="section-bar-accent"></div>
+    <div class="section-bar-body">
+      <div class="section-bar-label">Section 3</div>
+      <div class="section-bar-title">Support & Resources</div>
+    </div>
+  </div>
+  <div class="note">Come ready to make commitments. This section is about removing barriers and resourcing them well.</div>
+
+  <div class="sub-label terracotta">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">What They Need From Leadership</div>
+  </div>
+  <div class="note">Be humble here. Receive feedback without defensiveness. Thank them.</div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">1.</span><span class="q-text">What is one thing leadership could do differently that would make a real difference for you?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">2.</span><span class="q-text">Do you feel adequately equipped and resourced for your work?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">3.</span><span class="q-text">Have there been moments where you felt unsupported or unseen by leadership?</span></div>
+    <div class="q-facilitator-note">Ask: "What would have helped in that moment?"</div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">4.</span><span class="q-text">Is there a decision you'd like to understand better or give input on?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <div class="sub-label slate">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">External Support & Fundraising</div>
+  </div>
+  <div class="note">Proactively offering outside support is a sign of care, not weakness.</div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">5.</span><span class="q-text">Have you considered connecting with a counselor, spiritual director, or coach?</span></div>
+    <div class="q-facilitator-note">If open: "We'd love to help identify and fund that for you."</div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">6.</span><span class="q-text">Are there professional development areas you'd like to grow in?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">7.</span><span class="q-text">Do you have community outside of i58 here? (Church, friendships, expat connections?)</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">8.</span><span class="q-text">How is your fundraising support level — at, below, or above target?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">9.</span><span class="q-text">Are there any financial stressors affecting your ability to focus on your work?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SECTION 4 -->
+  <div class="section-bar indigo">
+    <div class="section-bar-accent"></div>
+    <div class="section-bar-body">
+      <div class="section-bar-label">Section 4</div>
+      <div class="section-bar-title">Vision & Calling</div>
+    </div>
+  </div>
+  <div class="note">Don't skip this section. It's often where the most important conversations happen.</div>
+
+  <div class="sub-label">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">Sense of Purpose & Direction</div>
+  </div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">1.</span><span class="q-text">When you think about why you came here — what was your original calling? Does it still feel alive?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">2.</span><span class="q-text">Do you feel like you know what God has you here for, or does it feel foggy?</span></div>
+    <div class="q-facilitator-note">If foggy — explore together. What would help bring clarity?</div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">3.</span><span class="q-text">When do you feel most alive in this work? Describe a recent moment.</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <div class="sub-label aqua">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">Engagement & Meaning</div>
+  </div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">4.</span><span class="q-text">Is there anything about the work with migrants that has surprised or changed you?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">5.</span><span class="q-text">Do you feel like your work is making a difference, even when it's hard to see?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">6.</span><span class="q-text">Are there dreams or ideas you have that feel unexplored?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">7.</span><span class="q-text">What would re-ignite your vision if you're feeling flat?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CLOSING -->
+  <div class="page-title" style="font-size:17px; margin-top:8px;">Closing & Next Steps</div>
+  <hr class="page-rule">
+  <p style="font-size:10.5px; margin-bottom:14px; color:var(--dark);">End every check-in with clear, specific commitments on both sides. Vague encouragement fades; concrete follow-through builds trust.</p>
+
+  <div class="sub-label terracotta">
+    <div class="sub-label-bar"></div>
+    <div class="sub-label-text">Closing Questions</div>
+  </div>
+
+  <div class="question">
+    <div class="question-row"><span class="q-num">1.</span><span class="q-text">Is there anything else on your heart that you haven't had space to say?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">2.</span><span class="q-text">What is one thing you're asking God for in this next season?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+  <div class="question">
+    <div class="question-row"><span class="q-num">3.</span><span class="q-text">What is one thing you need from us before our next check-in?</span></div>
+    <div class="note-lines">
+      <input type="text" class="note-line" placeholder="Notes...">
+      <input type="text" class="note-line" placeholder="">
+    </div>
+  </div>
+
+  <!-- ACTION BOX -->
+  <div class="action-box">
+    <div class="action-header">Action Items & Follow-Up</div>
+    <div class="action-body">
+      <div class="action-section-label">Leadership commits to:</div>
+      <div class="action-line"><span class="action-num">1.</span><input type="text" class="action-input" placeholder=""></div>
+      <div class="action-line"><span class="action-num">2.</span><input type="text" class="action-input" placeholder=""></div>
+      <div class="action-line"><span class="action-num">3.</span><input type="text" class="action-input" placeholder=""></div>
+      <div class="action-section-label">Volunteer commits to:</div>
+      <div class="action-line"><span class="action-num">1.</span><input type="text" class="action-input" placeholder=""></div>
+      <div class="action-line"><span class="action-num">2.</span><input type="text" class="action-input" placeholder=""></div>
+      <div class="action-line"><span class="action-num">3.</span><input type="text" class="action-input" placeholder=""></div>
+      <div class="action-meta">
+        <div class="action-meta-field">
+          <label>Next Check-In Date</label>
+          <input type="text" placeholder="DD / MM / YYYY">
+        </div>
+        <div class="action-meta-field">
+          <label>Facilitator</label>
+          <input type="text" placeholder="Name">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="private-notes-label">Facilitator's private notes (keep confidential):</div>
+  <textarea class="note-area" rows="6" placeholder="Notes..."></textarea>
+
+</div><!-- end page -->
+
+</body>
+</html>
