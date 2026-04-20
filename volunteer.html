@@ -35,8 +35,27 @@
   @media print {
     body { font-size: 16.8pt; }
     .no-print { display: none !important; }
-    .page { page-break-after: always; padding: 0.6in 0.75in; }
+    .cover,
+    .page,
+    .container {
+      max-width: none !important;
+      width: 100% !important;
+    }
+    .cover {
+      min-height: auto !important;
+      padding: 0.6in 0.75in !important;
+      margin: 0 !important;
+    }
+    .page {
+      page-break-after: always;
+      padding: 0.6in 0.75in !important;
+      margin: 0 !important;
+    }
     .page:last-child { page-break-after: avoid; }
+    .container {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
     input[type="text"], textarea {
       border: none !important;
       border-bottom: 1px solid #999 !important;
@@ -61,36 +80,61 @@
       color: transparent !important;
       opacity: 0 !important;
     }
-    /* Ruled write-lines use nowrap + hidden overflow on screen; print must show full text */
-    input.write-line {
-      white-space: pre-wrap !important;
-      overflow: visible !important;
-      height: auto !important;
-      min-height: 1.5em !important;
-      max-height: none !important;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-    }
+    /* Free-form long-write textarea expands to show full text on paper */
     textarea.write-area {
       overflow: visible !important;
+      overflow-x: visible !important;
+      overflow-y: visible !important;
       height: auto !important;
       min-height: 5em !important;
       max-height: none !important;
       white-space: pre-wrap !important;
     }
-    .action-line {
-      flex-wrap: wrap !important;
-    }
+    /* Hide the ruled form fields on paper; print the mirror divs instead */
+    input.write-line,
+    textarea.write-typed,
     input.action-input {
-      flex: 1 1 100% !important;
-      min-width: 0 !important;
-      overflow: visible !important;
+      display: none !important;
+    }
+    .print-mirror {
+      display: block !important;
+      width: 100%;
+      padding: 0 2px;
+      margin: 0 0 6px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 18px;
+      color: var(--dark);
+      line-height: 1.8;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      border-bottom: none;
+    }
+    /* Empty ruled-line fields keep a writing line; typed answers print clean (no random underline). */
+    .print-mirror:empty {
+      border-bottom: 1px solid #999;
+      min-height: 2.4em;
+      padding: 5px 2px;
+    }
+    /* Mode-aware mirror visibility:
+       - Handwritten (default): hide the typed-mode mirror, keep the per-line ruled mirrors.
+       - Typed: hide the per-line ruled mirrors; only the single typed mirror prints. */
+    body:not(.mode-typed) .print-mirror[data-for="write-typed"] { display: none !important; }
+    body.mode-typed .print-mirror[data-for="write-line"] { display: none !important; }
+    /* In typed mode, an empty typed mirror prints nothing (no orphan ruled line). */
+    body.mode-typed .print-mirror[data-for="write-typed"]:empty { display: none !important; }
+    .print-mirror[data-for="action-input"] {
+      flex: 1 1 100%;
+      min-width: 0;
     }
     .part-bar, .intro-box, .skip-box, .rating-row {
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
   }
+
+  /* Print-only mirrors (kept hidden on screen) */
+  .print-mirror { display: none; }
 
   .container { max-width: min(1100px, calc(100vw - 32px)); margin: 0 auto; padding: 20px; }
 
@@ -128,6 +172,57 @@
   .btn-primary { background: var(--terracotta); color: white; }
   .btn-secondary { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
   .btn:hover { opacity: 0.88; }
+
+  /* ── MODE TOGGLE (Handwritten / Typed) ── */
+  .mode-toggle {
+    display: inline-flex;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .mode-toggle .mode-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.85);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13.2px;
+    font-weight: 600;
+    padding: 7px 14px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .mode-toggle .mode-btn.active {
+    background: var(--terracotta);
+    color: white;
+  }
+  .mode-toggle .mode-btn:not(.active):hover { background: rgba(255,255,255,0.10); }
+
+  /* Typed-mode textarea (hidden until typed mode is active). One per .write-lines group. */
+  .write-typed {
+    display: none;
+    width: 100%;
+    border: 1px solid var(--midgray);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    color: var(--dark);
+    line-height: 1.6;
+    background: #fff;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+  }
+  .write-typed:hover { border-color: #a8a8a4; }
+  .write-typed:focus { outline: none; border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(28,71,106,0.15); }
+
+  /* Mode-driven swap on screen */
+  body.mode-typed .write-lines .write-line { display: none !important; }
+  body.mode-typed .write-lines .write-typed { display: block; }
 
   /* COVER */
   .cover {
@@ -282,13 +377,17 @@
     background: transparent;
     outline: none;
     display: block;
-    white-space: nowrap;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    height: 2.4em;
-    min-height: 2.4em;
-    max-height: 2.4em;
     line-height: 1.8;
+  }
+  @media screen {
+    .write-line {
+      white-space: nowrap;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      height: 2.4em;
+      min-height: 2.4em;
+      max-height: 2.4em;
+    }
   }
   .write-line:focus { border-bottom-color: var(--indigo); }
 
@@ -532,6 +631,10 @@
 <div class="toolbar no-print">
   <span class="toolbar-title">i58 · My 6-Month Check-In — Volunteer Reflection Worksheet</span>
   <div class="toolbar-btns">
+    <div class="mode-toggle" role="group" aria-label="Answer mode">
+      <button type="button" class="mode-btn" data-mode="handwritten" aria-pressed="true">Handwritten</button>
+      <button type="button" class="mode-btn" data-mode="typed" aria-pressed="false">Typed</button>
+    </div>
     <button class="btn btn-secondary" onclick="window.print()">🖨 Print</button>
   </div>
 </div>
@@ -1048,6 +1151,154 @@ document.addEventListener('DOMContentLoaded', function() {
     if (el) el.addEventListener('input', syncDynamicLabels);
   });
   syncDynamicLabels();
+});
+
+/**
+ * Print-mirror divs: typed text is sent to paper through normal HTML flow
+ * (input internals clip at their intrinsic width on print). Each
+ * .write-line / .write-typed / .action-input gets a sibling .print-mirror
+ * div whose textContent tracks the field value. CSS hides the field and
+ * shows the mirror only on @media print.
+ */
+function buildPrintMirrors(root) {
+  if (!root) return;
+  var fields = root.querySelectorAll('.write-line, .write-typed, .action-input');
+  for (var i = 0; i < fields.length; i++) {
+    var field = fields[i];
+    var mirror = field.nextElementSibling;
+    if (!mirror || !mirror.classList || !mirror.classList.contains('print-mirror')) {
+      mirror = document.createElement('div');
+      mirror.className = 'print-mirror';
+      mirror.setAttribute('aria-hidden', 'true');
+      mirror.dataset.for =
+        field.classList.contains('write-typed') ? 'write-typed' :
+        field.classList.contains('write-line') ? 'write-line' : 'action-input';
+      field.parentNode.insertBefore(mirror, field.nextSibling);
+    }
+    mirror.textContent = field.value || '';
+  }
+}
+
+document.addEventListener('input', function(e) {
+  var t = e.target;
+  if (!t || !t.classList) return;
+  if (!t.classList.contains('write-line') && !t.classList.contains('write-typed') && !t.classList.contains('action-input')) return;
+  var next = t.nextElementSibling;
+  if (next && next.classList && next.classList.contains('print-mirror')) {
+    next.textContent = t.value || '';
+  }
+});
+
+window.addEventListener('beforeprint', function() { buildPrintMirrors(document); });
+document.addEventListener('DOMContentLoaded', function() { buildPrintMirrors(document); });
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Answer-mode toggle: 'handwritten' (default) shows 3 ruled lines per question
+ * with redistribution. 'typed' replaces each group with one auto-growing
+ * textarea so the printed page contains only the typed answer (no empty
+ * ruled lines). Choice persists in localStorage and applies to both pages.
+ *
+ * Volunteer-specific: .write-line inputs are bare siblings in markup, so
+ * we wrap consecutive runs in a <div class="write-lines"> at load time and
+ * append one .write-typed textarea per wrap.
+ * ───────────────────────────────────────────────────────────────────────── */
+var MODE_KEY = 'i58.checkin.mode';
+
+function getMode() {
+  try { return localStorage.getItem(MODE_KEY) === 'typed' ? 'typed' : 'handwritten'; }
+  catch (e) { return 'handwritten'; }
+}
+
+function applyMode(mode) {
+  if (mode !== 'typed') mode = 'handwritten';
+  try { localStorage.setItem(MODE_KEY, mode); } catch (e) { /* ignore */ }
+  document.body.classList.toggle('mode-typed', mode === 'typed');
+  document.body.classList.toggle('mode-handwritten', mode === 'handwritten');
+  var btns = document.querySelectorAll('.mode-toggle .mode-btn');
+  for (var i = 0; i < btns.length; i++) {
+    var on = btns[i].dataset.mode === mode;
+    btns[i].classList.toggle('active', on);
+    btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  if (mode === 'typed') {
+    softSyncHandwrittenIntoTyped();
+    autoGrowAllTyped();
+  }
+  buildPrintMirrors(document);
+}
+
+/** Wrap each consecutive run of .write-line inputs in a .write-lines container
+ *  and append one .write-typed textarea inside the wrap. Idempotent. */
+function wrapWriteLineGroups() {
+  var inputs = document.querySelectorAll('input.write-line');
+  var groups = [];
+  var current = null;
+  for (var i = 0; i < inputs.length; i++) {
+    var inp = inputs[i];
+    if (inp.parentNode && inp.parentNode.classList && inp.parentNode.classList.contains('write-lines')) continue;
+    if (current && current[current.length - 1].nextElementSibling === inp) {
+      current.push(inp);
+    } else {
+      if (current) groups.push(current);
+      current = [inp];
+    }
+  }
+  if (current) groups.push(current);
+
+  for (var g = 0; g < groups.length; g++) {
+    var run = groups[g];
+    var first = run[0];
+    var wrap = document.createElement('div');
+    wrap.className = 'write-lines';
+    first.parentNode.insertBefore(wrap, first);
+    for (var k = 0; k < run.length; k++) wrap.appendChild(run[k]);
+    var ta = document.createElement('textarea');
+    ta.className = 'write-typed';
+    ta.rows = 3;
+    ta.placeholder = 'Type your answer...';
+    wrap.appendChild(ta);
+  }
+}
+
+function softSyncHandwrittenIntoTyped() {
+  var groups = document.querySelectorAll('.write-lines');
+  for (var i = 0; i < groups.length; i++) {
+    var typed = groups[i].querySelector(':scope > .write-typed');
+    if (!typed || typed.value.trim().length > 0) continue;
+    var lines = groups[i].querySelectorAll(':scope > .write-line');
+    var parts = [];
+    for (var j = 0; j < lines.length; j++) {
+      if (lines[j].value) parts.push(lines[j].value);
+    }
+    if (parts.length === 0) continue;
+    typed.value = parts.join('');
+  }
+}
+
+function autoGrowTyped(t) {
+  if (!t) return;
+  t.style.height = 'auto';
+  t.style.height = (t.scrollHeight + 2) + 'px';
+}
+
+function autoGrowAllTyped() {
+  var list = document.querySelectorAll('.write-typed');
+  for (var i = 0; i < list.length; i++) autoGrowTyped(list[i]);
+}
+
+document.addEventListener('input', function(e) {
+  if (e.target && e.target.classList && e.target.classList.contains('write-typed')) {
+    autoGrowTyped(e.target);
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  wrapWriteLineGroups();
+  var btns = document.querySelectorAll('.mode-toggle .mode-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function() { applyMode(this.dataset.mode); });
+  }
+  applyMode(getMode());
 });
 </script>
 

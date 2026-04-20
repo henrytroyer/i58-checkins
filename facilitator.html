@@ -36,8 +36,27 @@
   @media print {
     body { font-size: 16.8pt; }
     .no-print { display: none !important; }
-    .page { page-break-after: always; padding: 0.6in 0.75in; }
+    .cover,
+    .page,
+    .container {
+      max-width: none !important;
+      width: 100% !important;
+    }
+    .cover {
+      min-height: auto !important;
+      padding: 0.6in 0.75in !important;
+      margin: 0 !important;
+    }
+    .page {
+      page-break-after: always;
+      padding: 0.6in 0.75in !important;
+      margin: 0 !important;
+    }
     .page:last-child { page-break-after: avoid; }
+    .container {
+      padding: 0 !important;
+      margin: 0 !important;
+    }
     input[type="text"], textarea {
       border: none !important;
       border-bottom: 1px solid #999 !important;
@@ -62,36 +81,61 @@
       color: transparent !important;
       opacity: 0 !important;
     }
-    /* Screen uses single-line + overflow hidden; print fonts/width differ and clip text — show full content */
-    textarea.note-line {
-      white-space: pre-wrap !important;
-      overflow: visible !important;
-      height: auto !important;
-      min-height: 1.5em !important;
-      max-height: none !important;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-    }
+    /* Free-form long-note textarea expands to show full text on paper */
     textarea.note-area {
       overflow: visible !important;
+      overflow-x: visible !important;
+      overflow-y: visible !important;
       height: auto !important;
       min-height: 5em !important;
       max-height: none !important;
       white-space: pre-wrap !important;
     }
-    .action-line {
-      flex-wrap: wrap !important;
-    }
+    /* Hide the ruled form fields on paper; print the mirror divs instead */
+    textarea.note-line,
+    textarea.note-typed,
     input.action-input {
-      flex: 1 1 100% !important;
-      min-width: 0 !important;
-      overflow: visible !important;
+      display: none !important;
+    }
+    .print-mirror {
+      display: block !important;
+      width: 100%;
+      padding: 0 2px;
+      margin: 0 0 6px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 18px;
+      color: var(--dark);
+      line-height: 1.8;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      border-bottom: none;
+    }
+    /* Empty ruled-line fields keep a writing line; typed answers print clean (no random underline). */
+    .print-mirror:empty {
+      border-bottom: 1px solid #999;
+      min-height: 2.4em;
+      padding: 5px 2px;
+    }
+    /* Mode-aware mirror visibility:
+       - Handwritten (default): hide the typed-mode mirror, keep the per-line ruled mirrors.
+       - Typed: hide the per-line ruled mirrors; only the single typed mirror prints. */
+    body:not(.mode-typed) .print-mirror[data-for="note-typed"] { display: none !important; }
+    body.mode-typed .print-mirror[data-for="note-line"] { display: none !important; }
+    /* In typed mode, an empty typed mirror prints nothing (no orphan ruled line). */
+    body.mode-typed .print-mirror[data-for="note-typed"]:empty { display: none !important; }
+    .print-mirror[data-for="action-input"] {
+      flex: 1 1 100%;
+      min-width: 0;
     }
     .section-bar, .tip-header, .skip-box, .action-header {
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
   }
+
+  /* Print-only mirrors (kept hidden on screen) */
+  .print-mirror { display: none; }
 
   /* ── SCREEN ── */
   .container { max-width: min(1100px, calc(100vw - 32px)); margin: 0 auto; padding: 20px; }
@@ -132,6 +176,57 @@
   .btn-primary { background: var(--terracotta); color: white; }
   .btn-secondary { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
   .btn:hover { opacity: 0.88; }
+
+  /* ── MODE TOGGLE (Handwritten / Typed) ── */
+  .mode-toggle {
+    display: inline-flex;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .mode-toggle .mode-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.85);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13.2px;
+    font-weight: 600;
+    padding: 7px 14px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .mode-toggle .mode-btn.active {
+    background: var(--terracotta);
+    color: white;
+  }
+  .mode-toggle .mode-btn:not(.active):hover { background: rgba(255,255,255,0.10); }
+
+  /* Typed-mode textarea (hidden until typed mode is active). One per .note-lines group. */
+  .note-typed {
+    display: none;
+    width: 100%;
+    border: 1px solid var(--midgray);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    color: var(--dark);
+    line-height: 1.6;
+    background: #fff;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+  }
+  .note-typed:hover { border-color: #a8a8a4; }
+  .note-typed:focus { outline: none; border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(28,71,106,0.15); }
+
+  /* Mode-driven swap on screen */
+  body.mode-typed .note-lines .note-line { display: none !important; }
+  body.mode-typed .note-lines .note-typed { display: block; }
 
   /* ── COVER ── */
   .cover {
@@ -311,7 +406,7 @@
   }
   .q-facilitator-note::before { content: "➝ "; }
 
-  /* Note lines */
+  /* Note lines — shared look; single-line / overflow rules are screen-only (print uses normal flow) */
   .note-lines { padding-left: 4px; }
   .note-line {
     width: 100%;
@@ -325,15 +420,19 @@
     background: transparent;
     outline: none;
     display: block;
-    resize: none;
-    white-space: nowrap;
-    overflow-x: hidden;
-    overflow-y: hidden;
-    height: 2.4em;
-    min-height: 2.4em;
-    max-height: 2.4em;
     line-height: 1.8;
     box-sizing: border-box;
+  }
+  @media screen {
+    .note-line {
+      resize: none;
+      white-space: nowrap;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      height: 2.4em;
+      min-height: 2.4em;
+      max-height: 2.4em;
+    }
   }
   .note-line:focus { border-bottom-color: var(--indigo); }
 
@@ -518,6 +617,10 @@
 <div class="toolbar no-print">
   <span class="toolbar-title">i58 · 6-Month Check-In — Facilitator Guide</span>
   <div class="toolbar-btns">
+    <div class="mode-toggle" role="group" aria-label="Answer mode">
+      <button type="button" class="mode-btn" data-mode="handwritten" aria-pressed="true">Handwritten</button>
+      <button type="button" class="mode-btn" data-mode="typed" aria-pressed="false">Typed</button>
+    </div>
     <button class="btn btn-secondary" onclick="window.print()">🖨 Print</button>
   </div>
 </div>
@@ -1162,6 +1265,135 @@ document.addEventListener('DOMContentLoaded', function() {
     if (el) el.addEventListener('input', syncDynamicLabels);
   });
   syncDynamicLabels();
+});
+
+/**
+ * Print-mirror divs: typed text is sent to paper through normal HTML flow
+ * (textarea/input internals clip at their intrinsic width on print).
+ * Each .note-line / .note-typed / .action-input gets a sibling .print-mirror
+ * div whose textContent tracks the field value. CSS hides the field and shows
+ * the mirror only on @media print.
+ */
+function buildPrintMirrors(root) {
+  if (!root) return;
+  var fields = root.querySelectorAll('.note-line, .note-typed, .action-input');
+  for (var i = 0; i < fields.length; i++) {
+    var field = fields[i];
+    var mirror = field.nextElementSibling;
+    if (!mirror || !mirror.classList || !mirror.classList.contains('print-mirror')) {
+      mirror = document.createElement('div');
+      mirror.className = 'print-mirror';
+      mirror.setAttribute('aria-hidden', 'true');
+      mirror.dataset.for =
+        field.classList.contains('note-typed') ? 'note-typed' :
+        field.classList.contains('note-line') ? 'note-line' : 'action-input';
+      field.parentNode.insertBefore(mirror, field.nextSibling);
+    }
+    mirror.textContent = field.value || '';
+  }
+}
+
+document.addEventListener('input', function(e) {
+  var t = e.target;
+  if (!t || !t.classList) return;
+  if (!t.classList.contains('note-line') && !t.classList.contains('note-typed') && !t.classList.contains('action-input')) return;
+  var next = t.nextElementSibling;
+  if (next && next.classList && next.classList.contains('print-mirror')) {
+    next.textContent = t.value || '';
+  }
+});
+
+window.addEventListener('beforeprint', function() { buildPrintMirrors(document); });
+document.addEventListener('DOMContentLoaded', function() { buildPrintMirrors(document); });
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Answer-mode toggle: 'handwritten' (default) shows 3 ruled lines per question
+ * with redistribution. 'typed' replaces each group with one auto-growing
+ * textarea so the printed page contains only the typed answer (no empty
+ * ruled lines). Choice persists in localStorage and applies to both pages.
+ * ───────────────────────────────────────────────────────────────────────── */
+var MODE_KEY = 'i58.checkin.mode';
+
+function getMode() {
+  try { return localStorage.getItem(MODE_KEY) === 'typed' ? 'typed' : 'handwritten'; }
+  catch (e) { return 'handwritten'; }
+}
+
+function applyMode(mode) {
+  if (mode !== 'typed') mode = 'handwritten';
+  try { localStorage.setItem(MODE_KEY, mode); } catch (e) { /* ignore */ }
+  document.body.classList.toggle('mode-typed', mode === 'typed');
+  document.body.classList.toggle('mode-handwritten', mode === 'handwritten');
+  var btns = document.querySelectorAll('.mode-toggle .mode-btn');
+  for (var i = 0; i < btns.length; i++) {
+    var on = btns[i].dataset.mode === mode;
+    btns[i].classList.toggle('active', on);
+    btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  if (mode === 'typed') {
+    /* Soft-sync: if typed-mode field is empty but the user already typed
+       in handwritten mode, copy the concatenated lines forward so they
+       don't lose work when switching to print as typed. */
+    softSyncHandwrittenIntoTyped();
+    autoGrowAllTyped();
+  }
+  buildPrintMirrors(document);
+}
+
+/** For each .note-lines group, append one auto-growing typed textarea. */
+function injectTypedTextareas() {
+  var groups = document.querySelectorAll('.note-lines');
+  for (var i = 0; i < groups.length; i++) {
+    var g = groups[i];
+    if (g.querySelector(':scope > .note-typed')) continue;
+    var ta = document.createElement('textarea');
+    ta.className = 'note-typed';
+    ta.rows = 3;
+    ta.placeholder = 'Type your answer...';
+    g.appendChild(ta);
+  }
+}
+
+function softSyncHandwrittenIntoTyped() {
+  var groups = document.querySelectorAll('.note-lines');
+  for (var i = 0; i < groups.length; i++) {
+    var typed = groups[i].querySelector(':scope > .note-typed');
+    if (!typed || typed.value.trim().length > 0) continue;
+    var lines = groups[i].querySelectorAll(':scope > .note-line');
+    var parts = [];
+    for (var j = 0; j < lines.length; j++) {
+      if (lines[j].value) parts.push(lines[j].value);
+    }
+    if (parts.length === 0) continue;
+    /* Redistribution slices character-by-character, so empty joiner reconstructs the original text. */
+    typed.value = parts.join('');
+  }
+}
+
+function autoGrowTyped(t) {
+  if (!t) return;
+  t.style.height = 'auto';
+  t.style.height = (t.scrollHeight + 2) + 'px';
+}
+
+function autoGrowAllTyped() {
+  var list = document.querySelectorAll('.note-typed');
+  for (var i = 0; i < list.length; i++) autoGrowTyped(list[i]);
+}
+
+document.addEventListener('input', function(e) {
+  if (e.target && e.target.classList && e.target.classList.contains('note-typed')) {
+    autoGrowTyped(e.target);
+  }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  injectTypedTextareas();
+  var btns = document.querySelectorAll('.mode-toggle .mode-btn');
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function() { applyMode(this.dataset.mode); });
+  }
+  applyMode(getMode());
 });
 </script>
 
