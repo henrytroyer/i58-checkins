@@ -123,6 +123,15 @@
     body.mode-typed .print-mirror[data-for="write-line"] { display: none !important; }
     /* In typed mode, an empty typed mirror prints nothing (no orphan ruled line). */
     body.mode-typed .print-mirror[data-for="write-typed"]:empty { display: none !important; }
+    /* In typed mode, render the typed answer in a bordered box on paper to match the on-screen textarea. */
+    body.mode-typed .print-mirror[data-for="write-typed"]:not(:empty) {
+      border: 1px solid #999;
+      border-radius: 6px;
+      padding: 8px 10px;
+      margin: 0 0 10px;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
     .print-mirror[data-for="action-input"] {
       flex: 1 1 100%;
       min-width: 0;
