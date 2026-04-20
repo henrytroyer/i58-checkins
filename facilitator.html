@@ -1396,6 +1396,20 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function buildPrintMirrors(root) {
   if (!root) return;
+  /* Defensive: remove orphaned/duplicate mirrors whose previousElementSibling
+   * is not a matching field. Prevents stacking when DOM is restructured between
+   * passes (e.g. injectTypedTextareas appending .note-typed to existing groups). */
+  var existing = root.querySelectorAll('.print-mirror');
+  for (var x = 0; x < existing.length; x++) {
+    var m = existing[x];
+    var prev = m.previousElementSibling;
+    var validPrev = prev && prev.classList && (
+      prev.classList.contains('note-line') ||
+      prev.classList.contains('note-typed') ||
+      prev.classList.contains('action-input')
+    );
+    if (!validPrev) m.parentNode.removeChild(m);
+  }
   var fields = root.querySelectorAll('.note-line, .note-typed, .action-input');
   for (var i = 0; i < fields.length; i++) {
     var field = fields[i];
@@ -1424,7 +1438,9 @@ document.addEventListener('input', function(e) {
 });
 
 window.addEventListener('beforeprint', function() { buildPrintMirrors(document); });
-document.addEventListener('DOMContentLoaded', function() { buildPrintMirrors(document); });
+/* Initial mirror build is performed by the bottom DOMContentLoaded handler
+ * (after injectTypedTextareas + applyMode). Registering buildPrintMirrors
+ * here would race the inject and could produce orphaned/duplicate mirrors. */
 
 /* ─────────────────────────────────────────────────────────────────────────
  * Answer-mode toggle: 'handwritten' (default) shows 3 ruled lines per question

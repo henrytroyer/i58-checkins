@@ -1270,6 +1270,21 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function buildPrintMirrors(root) {
   if (!root) return;
+  /* Defensive: remove orphaned/duplicate mirrors whose previousElementSibling
+   * is not a matching field. This prevents stacking when the DOM has been
+   * restructured after a previous buildPrintMirrors pass (e.g. wrapWriteLineGroups
+   * moves .write-line inputs into a new container and leaves old mirrors behind). */
+  var existing = root.querySelectorAll('.print-mirror');
+  for (var x = 0; x < existing.length; x++) {
+    var m = existing[x];
+    var prev = m.previousElementSibling;
+    var validPrev = prev && prev.classList && (
+      prev.classList.contains('write-line') ||
+      prev.classList.contains('write-typed') ||
+      prev.classList.contains('action-input')
+    );
+    if (!validPrev) m.parentNode.removeChild(m);
+  }
   var fields = root.querySelectorAll('.write-line, .write-typed, .action-input');
   for (var i = 0; i < fields.length; i++) {
     var field = fields[i];
@@ -1298,7 +1313,9 @@ document.addEventListener('input', function(e) {
 });
 
 window.addEventListener('beforeprint', function() { buildPrintMirrors(document); });
-document.addEventListener('DOMContentLoaded', function() { buildPrintMirrors(document); });
+/* Initial mirror build is performed by the bottom DOMContentLoaded handler
+ * (after wrapWriteLineGroups + applyMode). Registering buildPrintMirrors
+ * here would race the wrap and produce orphaned/duplicate mirrors. */
 
 /* ─────────────────────────────────────────────────────────────────────────
  * Answer-mode toggle: 'handwritten' (default) shows 3 ruled lines per question
