@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- volunteer.html — i58 volunteer worksheet (cover names drive dynamic labels & ruled write-lines) -->
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,14 +26,14 @@
 
   body {
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 16pt;
+    font-size: 19.2pt;
     color: var(--dark);
     background: white;
     line-height: 1.5;
   }
 
   @media print {
-    body { font-size: 14pt; }
+    body { font-size: 16.8pt; }
     .no-print { display: none !important; }
     .page { page-break-after: always; padding: 0.6in 0.75in; }
     .page:last-child { page-break-after: avoid; }
@@ -44,13 +45,29 @@
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
+    /* Hide placeholder when empty; typed content still prints normally */
+    input:placeholder-shown::placeholder,
+    textarea:placeholder-shown::placeholder {
+      color: transparent !important;
+      opacity: 0 !important;
+    }
+    input:placeholder-shown::-webkit-input-placeholder,
+    textarea:placeholder-shown::-webkit-input-placeholder {
+      color: transparent !important;
+      opacity: 0 !important;
+    }
+    input:placeholder-shown::-moz-placeholder,
+    textarea:placeholder-shown::-moz-placeholder {
+      color: transparent !important;
+      opacity: 0 !important;
+    }
     .part-bar, .intro-box, .skip-box, .rating-row {
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
     }
   }
 
-  .container { max-width: 820px; margin: 0 auto; padding: 20px; }
+  .container { max-width: min(1100px, calc(100vw - 32px)); margin: 0 auto; padding: 20px; }
 
   .toolbar {
     background: #2E7D6F;
@@ -63,14 +80,20 @@
     top: 0;
     z-index: 100;
   }
-  .toolbar-title { color: white; font-size: 13px; font-weight: 600; letter-spacing: 0.03em; }
+  .toolbar-title {
+    color: white;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15.6px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
   .toolbar-btns { display: flex; gap: 8px; }
   .btn {
     padding: 7px 16px;
     border: none;
     border-radius: 4px;
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 12px;
+    font-size: 14.4px;
     font-weight: 600;
     cursor: pointer;
     display: inline-flex;
@@ -87,15 +110,41 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 60px 72px;
+    padding: 60px clamp(20px, 4vw, 72px);
     border-bottom: 4px solid #2E7D6F;
-    max-width: 1000px;
+    max-width: min(1100px, calc(100vw - 32px));
+    width: 100%;
     margin: 0 auto;
   }
-  .cover-org { font-size: 13px; font-weight: 700; letter-spacing: 0.18em; color: var(--slate); text-transform: uppercase; margin-bottom: 20px; }
-  .cover-title { font-family: 'Libre Baskerville', serif; font-size: 38px; font-weight: 700; color: var(--indigo); line-height: 1.15; margin-bottom: 10px; text-align: center; }
-  .cover-sub { font-size: 17px; font-weight: 600; color: var(--terracotta); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 32px; font-style: italic; }
-  .cover-rule { border: none; border-top: 1px solid var(--aqua); margin: 20px 0; }
+  .cover-org {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15.6px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--slate);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .cover-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 45.6px;
+    font-weight: 700;
+    color: var(--indigo);
+    line-height: 1.15;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  .cover-sub {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 20.4px;
+    font-weight: 600;
+    color: var(--terracotta);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    font-style: italic;
+  }
+  .cover-rule { border: none; border-top: 1px solid var(--aqua); margin: 24px 0; }
   .cover-ownership {
     background: var(--palesky);
     border-left: 4px solid var(--indigo);
@@ -103,17 +152,40 @@
     border-radius: 0 3px 3px 0;
     margin-bottom: 32px;
   }
-  .cover-ownership strong { color: var(--indigo); font-size: 13px; display: block; margin-bottom: 6px; }
-  .cover-ownership p { font-size: 16px; color: var(--dark); line-height: 1.6; margin-bottom: 6px; }
+  .cover-ownership strong { color: var(--indigo); font-size: 15.6px; display: block; margin-bottom: 6px; }
+  .cover-ownership p { font-size: 19.2px; color: var(--dark); line-height: 1.55; margin-bottom: 8px; }
   .cover-ownership p:last-child { margin-bottom: 0; }
   .cover-ownership em { color: var(--slate); }
   .cover-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  .cover-field label { display: block; font-size: 15px; font-weight: 700; letter-spacing: 0.12em; color: var(--indigo); text-transform: uppercase; margin-bottom: 4px; }
-  .cover-field input { width: 100%; border: none; border-bottom: 1.5px solid var(--midgray); padding: 4px 0; font-family: 'Source Sans 3', sans-serif; font-size: 12px; color: var(--dark); background: transparent; outline: none; }
+  .cover-field label {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--indigo);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .cover-field input {
+    width: 100%;
+    border: none;
+    border-bottom: 1.5px solid var(--midgray);
+    padding: 4px 0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14.4px;
+    color: var(--dark);
+    background: transparent;
+    outline: none;
+  }
   .cover-field input:focus { border-bottom-color: var(--indigo); }
 
-  /* CONTENT */
-  .page { padding: 40px 72px; max-width: 1000px; margin: 0 auto; }
+  /* CONTENT — match facilitator guide width & responsive padding */
+  .page {
+    padding: 40px clamp(20px, 4vw, 72px);
+    max-width: min(1100px, calc(100vw - 32px));
+    width: 100%;
+    margin: 0 auto;
+  }
 
   .part-bar {
     display: flex;
@@ -124,8 +196,20 @@
   }
   .part-bar-accent { width: 5px; flex-shrink: 0; }
   .part-bar-body { padding: 10px 16px; flex: 1; }
-  .part-bar-label { font-size: 13px; font-weight: 700; letter-spacing: 0.18em; color: var(--slate); text-transform: uppercase; }
-  .part-bar-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 1px; }
+  .part-bar-label {
+    font-size: 15.6px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--slate);
+    text-transform: uppercase;
+  }
+  .part-bar-title {
+    font-size: 15.6px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
 
   .part-bar.teal .part-bar-accent { background: #2E7D6F; }
   .part-bar.teal .part-bar-body { background: #EAF4F3; }
@@ -140,32 +224,112 @@
   .part-bar.taupe .part-bar-body { background: #F7F1EB; }
   .part-bar.taupe .part-bar-title { color: var(--taupe); }
 
-  .section-note { font-style: italic; font-size: 15px; color: var(--slate); margin: 0 0 16px; padding-left: 2px; }
+  .section-note {
+    font-style: italic;
+    font-size: 18px;
+    color: var(--slate);
+    margin: 0 0 16px;
+    padding-left: 2px;
+  }
 
-  .prompt { font-size: 16px; font-weight: 700; color: var(--dark); margin: 18px 0 4px; }
-  .sub-prompt { font-size: 13px; font-style: italic; color: var(--slate); margin: 0 0 6px 12px; }
+  .prompt {
+    font-size: 19.2px;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 18px 0 4px;
+  }
+  .sub-prompt {
+    font-size: 15.6px;
+    font-style: italic;
+    color: var(--slate);
+    margin: 0 0 6px 12px;
+  }
 
   .write-line {
     width: 100%;
     border: none;
     border-bottom: 1px solid var(--midgray);
-    padding: 6px 2px;
-    margin-bottom: 7px;
+    padding: 5px 2px;
+    margin-bottom: 6px;
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     color: var(--dark);
     background: transparent;
     outline: none;
     display: block;
+    white-space: nowrap;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    height: 2.4em;
+    min-height: 2.4em;
+    max-height: 2.4em;
+    line-height: 1.8;
   }
   .write-line:focus { border-bottom-color: var(--indigo); }
+
+  /* Action box (shared commitments — same pattern as facilitator guide) */
+  .action-box { border: 1.5px solid var(--terracotta); border-radius: 3px; overflow: hidden; margin: 20px 0; }
+  .action-header {
+    background: #FEF3EC;
+    padding: 10px 16px;
+    font-size: 15.6px;
+    font-weight: 700;
+    color: var(--terracotta);
+    letter-spacing: 0.04em;
+  }
+  .action-body { padding: 14px 16px; }
+  .action-section-label {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--indigo);
+    letter-spacing: 0.05em;
+    margin: 10px 0 6px;
+  }
+  .action-section-label:first-child { margin-top: 0; }
+  .action-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .action-num {
+    font-size: 19.2px;
+    font-weight: 700;
+    color: var(--terracotta);
+    flex-shrink: 0;
+  }
+  .action-input {
+    flex: 1;
+    border: none;
+    border-bottom: 1px solid var(--midgray);
+    padding: 4px 0;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    color: var(--dark);
+    background: transparent;
+    outline: none;
+  }
+  .action-input:focus { border-bottom-color: var(--indigo); }
+  .add-btn {
+    background: none;
+    border: 1.5px dashed var(--midgray);
+    border-radius: 4px;
+    padding: 6px 16px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    color: var(--terracotta);
+    cursor: pointer;
+    margin: 8px 0 16px;
+    font-weight: 600;
+  }
+  .add-btn:hover { border-color: var(--terracotta); background: #FEF3EC; }
 
   textarea.write-area {
     width: 100%;
     border: none;
     border-bottom: 1px solid var(--midgray);
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     color: var(--dark);
     background: transparent;
     resize: none;
@@ -177,19 +341,96 @@
   }
   textarea.write-area:focus { border-bottom-color: var(--indigo); }
 
-  /* Rating scale */
-  .rating-wrap { margin: 8px 0 14px; }
-  .rating-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  /* Rating scale — full-width grid: left label | 1–5 | right label (one stable row) */
+  .rating-wrap {
+    margin: 12px 0 20px;
+    width: 100%;
   }
-  .rating-label { font-size: 13px; font-style: italic; color: var(--slate); flex: 0 0 130px; }
-  .rating-label.right { text-align: right; }
-  .rating-options { display: flex; gap: 6px; flex: 1; justify-content: center; }
-  .rating-option { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-  .rating-option input[type="radio"] { accent-color: var(--indigo); width: 16px; height: 16px; cursor: pointer; }
-  .rating-option span { font-size: 13px; color: var(--slate); }
+  .rating-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: end;
+    column-gap: clamp(10px, 2.5vw, 28px);
+    row-gap: 10px;
+    width: 100%;
+  }
+  .rating-label {
+    font-size: 15.6px;
+    font-style: italic;
+    color: var(--slate);
+    line-height: 1.35;
+    max-width: 16rem;
+  }
+  .rating-label:not(.right) {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: right;
+    justify-self: end;
+  }
+  .rating-label.right {
+    grid-column: 3;
+    grid-row: 1;
+    text-align: left;
+    justify-self: start;
+  }
+  .rating-options {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: clamp(6px, 1.2vw, 14px);
+    justify-content: center;
+    align-items: flex-end;
+    justify-self: center;
+  }
+  .rating-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+  .rating-option input[type="radio"] {
+    accent-color: var(--indigo);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .rating-option span {
+    font-size: 15.6px;
+    font-weight: 700;
+    color: var(--indigo);
+    line-height: 1;
+  }
+
+  @media (max-width: 520px) {
+    .rating-row {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+      justify-items: center;
+      text-align: center;
+    }
+    .rating-label:not(.right) {
+      grid-column: 1;
+      grid-row: 1;
+      text-align: center;
+      justify-self: center;
+      max-width: 100%;
+    }
+    .rating-options {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .rating-label.right {
+      grid-column: 1;
+      grid-row: 3;
+      text-align: center;
+      justify-self: center;
+      max-width: 100%;
+    }
+  }
 
   .divider { border: none; border-top: 1px solid var(--midgray); margin: 28px 0; }
   .divider.strong { border-top: 2px solid var(--indigo); }
@@ -200,7 +441,7 @@
     background: #FAF5EF;
     padding: 10px 14px;
     margin: 14px 0;
-    font-size: 15px;
+    font-size: 18px;
     color: var(--slate);
     font-style: italic;
   }
@@ -216,7 +457,7 @@
     background: var(--indigo);
     color: white;
     padding: 10px 16px;
-    font-size: 12px;
+    font-size: 15.6px;
     font-weight: 700;
     letter-spacing: 0.04em;
   }
@@ -225,13 +466,19 @@
     text-align: center;
     font-style: italic;
     color: var(--slate);
-    font-size: 16px;
+    font-size: 18px;
     padding: 20px 0 8px;
     border-top: 1px solid var(--lightgray);
     margin-top: 16px;
   }
 
-  .page-title { font-family: 'Libre Baskerville', serif; font-size: 22px; color: var(--indigo); margin-bottom: 4px; padding-top: 8px; }
+  .page-title {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 26.4px;
+    color: var(--indigo);
+    margin-bottom: 4px;
+    padding-top: 8px;
+  }
   .page-rule { border: none; border-bottom: 2px solid var(--aqua); margin: 6px 0 16px; }
 
   .intro-box {
@@ -243,8 +490,13 @@
     margin-bottom: 20px;
     border-radius: 0 3px 3px 0;
   }
-  .intro-box h2 { font-family: 'Libre Baskerville', serif; font-size: 14px; color: var(--indigo); margin-bottom: 8px; }
-  .intro-box p { font-size: 16px; color: var(--dark); margin-bottom: 8px; line-height: 1.6; }
+  .intro-box h2 {
+    font-family: 'Libre Baskerville', serif;
+    font-size: 16.8px;
+    color: var(--indigo);
+    margin-bottom: 8px;
+  }
+  .intro-box p { font-size: 19.2px; color: var(--dark); margin-bottom: 8px; line-height: 1.55; }
   .intro-box p:last-child { margin-bottom: 0; }
   .intro-box em { color: var(--slate); }
 </style>
@@ -273,8 +525,8 @@
   </div>
   <div class="cover-fields">
     <div class="cover-field" style="grid-column: 1 / -1;">
-      <label>Name</label>
-      <input type="text" placeholder="Your name">
+      <label>Volunteer Name</label>
+      <input type="text" id="cover-volunteer-name" placeholder="Your name">
     </div>
     <div class="cover-field">
       <label>Date</label>
@@ -283,6 +535,10 @@
     <div class="cover-field">
       <label>Period Covered</label>
       <input type="text" placeholder="e.g. Oct 2024 – Apr 2025">
+    </div>
+    <div class="cover-field" style="grid-column: 1 / -1;">
+      <label>Facilitator (check-in)</label>
+      <input type="text" id="cover-facilitator-name" placeholder="Name">
     </div>
   </div>
 </div>
@@ -302,6 +558,7 @@
 
   <div class="prompt">How would you describe this past 6 months? Give it a few words or a sentence.</div>
   <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
   <input type="text" class="write-line" placeholder="">
 
   <div class="prompt">What is something from this season that you're genuinely grateful for?</div>
@@ -344,6 +601,7 @@
   <div class="prompt">Are you finding rhythms of rest here in Germany? What does that look like?</div>
   <input type="text" class="write-line" placeholder="Write here...">
   <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
 
   <hr class="divider">
 
@@ -365,6 +623,7 @@
 
   <div class="prompt">How would you describe the culture of the team right now?</div>
   <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
   <input type="text" class="write-line" placeholder="">
 
   <div class="prompt">On a scale of 1–5, how connected do you feel to your teammates?</div>
@@ -396,6 +655,7 @@
   <div class="prompt">Is there a teammate you feel particularly grateful for this season? Why?</div>
   <input type="text" class="write-line" placeholder="Write here...">
   <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
 
   <hr class="divider">
 
@@ -417,6 +677,7 @@
 
   <div class="prompt">How would you describe your current role? Does the description match reality?</div>
   <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
   <input type="text" class="write-line" placeholder="">
 
   <div class="prompt">On a scale of 1–5, how well does your current role fit you?</div>
@@ -443,9 +704,11 @@
   <div class="prompt">Are there gifts or strengths you feel are underused right now?</div>
   <input type="text" class="write-line" placeholder="Write here...">
   <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
 
   <div class="prompt">If you could change one thing about your role, what would it be?</div>
   <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
   <input type="text" class="write-line" placeholder="">
 
   <hr class="divider">
@@ -494,6 +757,7 @@
   <div class="sub-prompt">Even a rough sense is helpful. It's okay to be uncertain.</div>
   <input type="text" class="write-line" placeholder="Write here...">
   <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
 
   <hr class="divider">
 
@@ -510,6 +774,7 @@
   <div class="prompt">What is something leadership has done well that you want to name and affirm?</div>
   <div class="sub-prompt">Positive feedback matters too — share it if it's true.</div>
   <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
   <input type="text" class="write-line" placeholder="">
 
   <div class="prompt">What is one thing leadership could do differently that would make a real difference for you?</div>
@@ -532,9 +797,11 @@
   <div class="sub-prompt">If yes — leadership would love to help make that happen. It's not weakness; it's good stewardship.</div>
   <input type="text" class="write-line" placeholder="Write here...">
   <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
 
   <div class="prompt">How is your fundraising support level? Any financial stressors we should know about?</div>
   <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
   <input type="text" class="write-line" placeholder="">
 
   <hr class="divider">
@@ -583,9 +850,11 @@
   <div class="prompt">Are there dreams or ideas you haven't had space to explore yet?</div>
   <input type="text" class="write-line" placeholder="Write here...">
   <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
 
   <div class="prompt">What would re-ignite your sense of vision if it's feeling flat?</div>
   <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
   <input type="text" class="write-line" placeholder="">
 
   <hr class="divider">
@@ -594,25 +863,168 @@
   <div class="closing-box">
     <div class="closing-header">Before You Meet</div>
     <div class="closing-body">
-      <p style="font-size:10.5px; color:var(--dark); margin-bottom:14px;">Use these three prompts to help you walk into your meeting knowing what matters most to you right now.</p>
+      <p style="font-size:15.6px; color:var(--dark); margin-bottom:14px; line-height:1.45;">Use these three prompts to help you walk into your meeting knowing what matters most to you right now.</p>
 
       <div class="prompt" style="margin-top:0;">One thing I most want leadership to know this season:</div>
       <input type="text" class="write-line" placeholder="Write here...">
+      <input type="text" class="write-line" placeholder="">
       <input type="text" class="write-line" placeholder="">
 
       <div class="prompt">One thing I most need from leadership right now:</div>
       <input type="text" class="write-line" placeholder="Write here...">
       <input type="text" class="write-line" placeholder="">
+      <input type="text" class="write-line" placeholder="">
 
       <div class="prompt">One thing I want to commit to in the next 6 months:</div>
       <input type="text" class="write-line" placeholder="Write here...">
       <input type="text" class="write-line" placeholder="">
+      <input type="text" class="write-line" placeholder="">
+
+      <div class="action-box">
+        <div class="action-header">Shared commitments (bring to your check-in)</div>
+        <div class="action-body">
+          <div class="action-section-label" id="label-leader-commits">Leadership commits to:</div>
+          <div id="leadership-commitments">
+            <div class="action-line"><span class="action-num">1.</span><input type="text" class="action-input" placeholder=""></div>
+            <div class="action-line"><span class="action-num">2.</span><input type="text" class="action-input" placeholder=""></div>
+            <div class="action-line"><span class="action-num">3.</span><input type="text" class="action-input" placeholder=""></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addCommitment('leadership-commitments')">+ Add commitment</button>
+
+          <div class="action-section-label" id="label-volunteer-commits">Volunteer commits to:</div>
+          <div id="volunteer-commitments">
+            <div class="action-line"><span class="action-num">1.</span><input type="text" class="action-input" placeholder=""></div>
+            <div class="action-line"><span class="action-num">2.</span><input type="text" class="action-input" placeholder=""></div>
+            <div class="action-line"><span class="action-num">3.</span><input type="text" class="action-input" placeholder=""></div>
+          </div>
+          <button type="button" class="add-btn" onclick="addCommitment('volunteer-commitments')">+ Add commitment</button>
+        </div>
+      </div>
 
       <div class="closing-final">You are seen, valued, and not alone in this. Thank you for being here.</div>
     </div>
   </div>
 
 </div><!-- end page -->
+
+<script>
+function nextWriteLine(input) {
+  if (!input || !input.classList.contains('write-line')) return null;
+  var n = input.nextElementSibling;
+  if (n && n.tagName === 'INPUT' && n.classList.contains('write-line')) return n;
+  return null;
+}
+
+/** Insert a new ruled line immediately after this input (same answer block). */
+function appendWriteLineAfter(el) {
+  var parent = el.parentNode;
+  var inp = document.createElement('input');
+  inp.type = 'text';
+  inp.className = 'write-line';
+  inp.placeholder = '';
+  if (el.nextSibling) parent.insertBefore(inp, el.nextSibling);
+  else parent.appendChild(inp);
+  return inp;
+}
+
+function redistributeWriteLineStartingAt(startEl) {
+  var focusEl = startEl;
+  var focusPos = typeof startEl.selectionStart === 'number' ? startEl.selectionStart : startEl.value.length;
+  var el = startEl;
+  for (;;) {
+    var next = nextWriteLine(el);
+    if (!next) {
+      if (el.scrollWidth > el.clientWidth) {
+        next = appendWriteLineAfter(el);
+      } else {
+        el.style.overflowX = 'hidden';
+        return { el: focusEl, pos: Math.min(focusPos, focusEl.value.length) };
+      }
+    }
+    el.style.overflowX = 'hidden';
+    if (el.scrollWidth <= el.clientWidth) {
+      return { el: focusEl, pos: Math.min(focusPos, focusEl.value.length) };
+    }
+    var chunk = '';
+    while (el.scrollWidth > el.clientWidth && el.value.length > 0) {
+      chunk = el.value.slice(-1) + chunk;
+      el.value = el.value.slice(0, -1);
+    }
+    if (!chunk) {
+      return { el: focusEl, pos: Math.min(focusPos, focusEl.value.length) };
+    }
+    next.value = chunk + next.value;
+    focusEl = next;
+    focusPos = chunk.length;
+    el = next;
+  }
+}
+
+document.addEventListener('input', function(e) {
+  var t = e.target;
+  if (t.classList && t.classList.contains('write-line')) {
+    var r = redistributeWriteLineStartingAt(t);
+    if (r && r.el) {
+      r.el.focus();
+      try {
+        r.el.setSelectionRange(r.pos, r.pos);
+      } catch (err) { /* ignore */ }
+    }
+    return;
+  }
+});
+
+document.addEventListener('keydown', function(e) {
+  if (!e.target.classList || !e.target.classList.contains('write-line')) return;
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  var cur = e.target;
+  var next = nextWriteLine(cur);
+  if (next) {
+    next.focus();
+    try {
+      next.setSelectionRange(0, 0);
+    } catch (err2) { /* ignore */ }
+    return;
+  }
+  var added = appendWriteLineAfter(cur);
+  added.focus();
+  try {
+    added.setSelectionRange(0, 0);
+  } catch (err3) { /* ignore */ }
+});
+
+function addCommitment(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var count = container.querySelectorAll('.action-line').length + 1;
+  var div = document.createElement('div');
+  div.className = 'action-line';
+  div.innerHTML = '<span class="action-num">' + count + '.</span><input type="text" class="action-input" placeholder="">';
+  container.appendChild(div);
+}
+
+function syncDynamicLabels() {
+  var volInput = document.getElementById('cover-volunteer-name');
+  var facInput = document.getElementById('cover-facilitator-name');
+  var vol = (volInput && volInput.value || '').trim();
+  var fac = (facInput && facInput.value || '').trim();
+  var leaderLabel = fac || 'Leadership';
+  var volunteerLabel = vol || 'Volunteer';
+  var elLeader = document.getElementById('label-leader-commits');
+  if (elLeader) elLeader.textContent = leaderLabel + ' commits to:';
+  var elVol = document.getElementById('label-volunteer-commits');
+  if (elVol) elVol.textContent = volunteerLabel + ' commits to:';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  ['cover-volunteer-name', 'cover-facilitator-name'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', syncDynamicLabels);
+  });
+  syncDynamicLabels();
+});
+</script>
 
 </body>
 </html>
