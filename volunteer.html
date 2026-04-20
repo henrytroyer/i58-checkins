@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i58 · My 6-Month Check-In — Volunteer Worksheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+  :root {
+    --indigo: #1C476A;
+    --terracotta: #C96C39;
+    --slate: #657C96;
+    --taupe: #AE9372;
+    --aqua: #ABDADC;
+    --sand: #EAD6B5;
+    --offwhite: #F1F1EF;
+    --palesky: #E6EDF2;
+    --dark: #2C2C2C;
+    --midgray: #C8C8C4;
+    --lightgray: #E9E9E9;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16pt;
+    color: var(--dark);
+    background: white;
+    line-height: 1.5;
+  }
+
+  @media print {
+    body { font-size: 14pt; }
+    .no-print { display: none !important; }
+    .page { page-break-after: always; padding: 0.6in 0.75in; }
+    .page:last-child { page-break-after: avoid; }
+    input[type="text"], textarea {
+      border: none !important;
+      border-bottom: 1px solid #999 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .part-bar, .intro-box, .skip-box, .rating-row {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+
+  .container { max-width: 820px; margin: 0 auto; padding: 20px; }
+
+  .toolbar {
+    background: #2E7D6F;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .toolbar-title { color: white; font-size: 13px; font-weight: 600; letter-spacing: 0.03em; }
+  .toolbar-btns { display: flex; gap: 8px; }
+  .btn {
+    padding: 7px 16px;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-primary { background: var(--terracotta); color: white; }
+  .btn-secondary { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); }
+  .btn:hover { opacity: 0.88; }
+
+  /* COVER */
+  .cover {
+    min-height: 96vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 72px;
+    border-bottom: 4px solid #2E7D6F;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .cover-org { font-size: 13px; font-weight: 700; letter-spacing: 0.18em; color: var(--slate); text-transform: uppercase; margin-bottom: 20px; }
+  .cover-title { font-family: 'Libre Baskerville', serif; font-size: 38px; font-weight: 700; color: var(--indigo); line-height: 1.15; margin-bottom: 10px; text-align: center; }
+  .cover-sub { font-size: 17px; font-weight: 600; color: var(--terracotta); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 32px; font-style: italic; }
+  .cover-rule { border: none; border-top: 1px solid var(--aqua); margin: 20px 0; }
+  .cover-ownership {
+    background: var(--palesky);
+    border-left: 4px solid var(--indigo);
+    padding: 14px 18px;
+    border-radius: 0 3px 3px 0;
+    margin-bottom: 32px;
+  }
+  .cover-ownership strong { color: var(--indigo); font-size: 13px; display: block; margin-bottom: 6px; }
+  .cover-ownership p { font-size: 16px; color: var(--dark); line-height: 1.6; margin-bottom: 6px; }
+  .cover-ownership p:last-child { margin-bottom: 0; }
+  .cover-ownership em { color: var(--slate); }
+  .cover-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .cover-field label { display: block; font-size: 15px; font-weight: 700; letter-spacing: 0.12em; color: var(--indigo); text-transform: uppercase; margin-bottom: 4px; }
+  .cover-field input { width: 100%; border: none; border-bottom: 1.5px solid var(--midgray); padding: 4px 0; font-family: 'Source Sans 3', sans-serif; font-size: 12px; color: var(--dark); background: transparent; outline: none; }
+  .cover-field input:focus { border-bottom-color: var(--indigo); }
+
+  /* CONTENT */
+  .page { padding: 40px 72px; max-width: 1000px; margin: 0 auto; }
+
+  .part-bar {
+    display: flex;
+    align-items: stretch;
+    margin: 32px 0 12px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .part-bar-accent { width: 5px; flex-shrink: 0; }
+  .part-bar-body { padding: 10px 16px; flex: 1; }
+  .part-bar-label { font-size: 13px; font-weight: 700; letter-spacing: 0.18em; color: var(--slate); text-transform: uppercase; }
+  .part-bar-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 1px; }
+
+  .part-bar.teal .part-bar-accent { background: #2E7D6F; }
+  .part-bar.teal .part-bar-body { background: #EAF4F3; }
+  .part-bar.teal .part-bar-title { color: #2E7D6F; }
+  .part-bar.indigo .part-bar-accent { background: var(--indigo); }
+  .part-bar.indigo .part-bar-body { background: var(--offwhite); }
+  .part-bar.indigo .part-bar-title { color: var(--indigo); }
+  .part-bar.terracotta .part-bar-accent { background: var(--terracotta); }
+  .part-bar.terracotta .part-bar-body { background: #FDF1EA; }
+  .part-bar.terracotta .part-bar-title { color: var(--terracotta); }
+  .part-bar.taupe .part-bar-accent { background: var(--taupe); }
+  .part-bar.taupe .part-bar-body { background: #F7F1EB; }
+  .part-bar.taupe .part-bar-title { color: var(--taupe); }
+
+  .section-note { font-style: italic; font-size: 15px; color: var(--slate); margin: 0 0 16px; padding-left: 2px; }
+
+  .prompt { font-size: 16px; font-weight: 700; color: var(--dark); margin: 18px 0 4px; }
+  .sub-prompt { font-size: 13px; font-style: italic; color: var(--slate); margin: 0 0 6px 12px; }
+
+  .write-line {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--midgray);
+    padding: 6px 2px;
+    margin-bottom: 7px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    color: var(--dark);
+    background: transparent;
+    outline: none;
+    display: block;
+  }
+  .write-line:focus { border-bottom-color: var(--indigo); }
+
+  textarea.write-area {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--midgray);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    color: var(--dark);
+    background: transparent;
+    resize: none;
+    outline: none;
+    line-height: 2.3;
+    display: block;
+    margin-bottom: 4px;
+    padding: 2px;
+  }
+  textarea.write-area:focus { border-bottom-color: var(--indigo); }
+
+  /* Rating scale */
+  .rating-wrap { margin: 8px 0 14px; }
+  .rating-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .rating-label { font-size: 13px; font-style: italic; color: var(--slate); flex: 0 0 130px; }
+  .rating-label.right { text-align: right; }
+  .rating-options { display: flex; gap: 6px; flex: 1; justify-content: center; }
+  .rating-option { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .rating-option input[type="radio"] { accent-color: var(--indigo); width: 16px; height: 16px; cursor: pointer; }
+  .rating-option span { font-size: 13px; color: var(--slate); }
+
+  .divider { border: none; border-top: 1px solid var(--midgray); margin: 28px 0; }
+  .divider.strong { border-top: 2px solid var(--indigo); }
+
+  .skip-box {
+    border: 1.5px dashed var(--taupe);
+    border-radius: 3px;
+    background: #FAF5EF;
+    padding: 10px 14px;
+    margin: 14px 0;
+    font-size: 15px;
+    color: var(--slate);
+    font-style: italic;
+  }
+  .skip-box strong { color: var(--taupe); font-style: normal; }
+
+  .closing-box {
+    border: 1.5px solid var(--indigo);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+  .closing-header {
+    background: var(--indigo);
+    color: white;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .closing-body { padding: 16px; }
+  .closing-final {
+    text-align: center;
+    font-style: italic;
+    color: var(--slate);
+    font-size: 16px;
+    padding: 20px 0 8px;
+    border-top: 1px solid var(--lightgray);
+    margin-top: 16px;
+  }
+
+  .page-title { font-family: 'Libre Baskerville', serif; font-size: 22px; color: var(--indigo); margin-bottom: 4px; padding-top: 8px; }
+  .page-rule { border: none; border-bottom: 2px solid var(--aqua); margin: 6px 0 16px; }
+
+  .intro-box {
+    border-left: 4px solid var(--indigo);
+    border-top: 1px solid #bed0de;
+    border-bottom: 1px solid #bed0de;
+    background: var(--palesky);
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    border-radius: 0 3px 3px 0;
+  }
+  .intro-box h2 { font-family: 'Libre Baskerville', serif; font-size: 14px; color: var(--indigo); margin-bottom: 8px; }
+  .intro-box p { font-size: 16px; color: var(--dark); margin-bottom: 8px; line-height: 1.6; }
+  .intro-box p:last-child { margin-bottom: 0; }
+  .intro-box em { color: var(--slate); }
+</style>
+</head>
+<body>
+
+<!-- Toolbar -->
+<div class="toolbar no-print">
+  <span class="toolbar-title">i58 · My 6-Month Check-In — Volunteer Reflection Worksheet</span>
+  <div class="toolbar-btns">
+    <button class="btn btn-secondary" onclick="window.print()">🖨 Print</button>
+  </div>
+</div>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-org">i58 Germany</div>
+  <div class="cover-title">My 6-Month Check-In</div>
+  <div class="cover-sub">Reflection & Preparation Worksheet</div>
+  <hr class="cover-rule">
+  <div class="cover-ownership">
+    <strong>This worksheet is yours.</strong>
+    <p>The questions below are prompts to help you gather your thoughts — not a questionnaire to hand in. You decide what to share in your meeting and what to keep private.</p>
+    <p>We've tried to balance the questions so you're not just looking at what's hard. We genuinely want to hear what's going well, what's bringing you life, and what God is doing in and through you. Start there if that helps.</p>
+    <p><em>Write freely and honestly — for yourself first. Pray before you start if that feels natural.</em></p>
+  </div>
+  <div class="cover-fields">
+    <div class="cover-field" style="grid-column: 1 / -1;">
+      <label>Name</label>
+      <input type="text" placeholder="Your name">
+    </div>
+    <div class="cover-field">
+      <label>Date</label>
+      <input type="text" placeholder="DD / MM / YYYY">
+    </div>
+    <div class="cover-field">
+      <label>Period Covered</label>
+      <input type="text" placeholder="e.g. Oct 2024 – Apr 2025">
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 1 -->
+<div class="page">
+
+  <!-- PART 1 -->
+  <div class="part-bar teal">
+    <div class="part-bar-accent"></div>
+    <div class="part-bar-body">
+      <div class="part-bar-label">Part 1</div>
+      <div class="part-bar-title">How Are You?</div>
+    </div>
+  </div>
+  <div class="section-note">Let's start with the whole person — not just your role or your output.</div>
+
+  <div class="prompt">How would you describe this past 6 months? Give it a few words or a sentence.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">What is something from this season that you're genuinely grateful for?</div>
+  <div class="sub-prompt">Start here — what has God done? What has been good?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">What has felt most life-giving — what has energized or filled you up?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">What has been hardest or most draining?</div>
+  <div class="sub-prompt">You don't have to have answers for why — just name what it's been.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">On a scale of 1–5, how are you doing overall right now?</div>
+  <div class="rating-wrap">
+    <div class="rating-row">
+      <span class="rating-label">Not doing well</span>
+      <div class="rating-options">
+        <div class="rating-option"><input type="radio" name="overall" value="1"><span>1</span></div>
+        <div class="rating-option"><input type="radio" name="overall" value="2"><span>2</span></div>
+        <div class="rating-option"><input type="radio" name="overall" value="3"><span>3</span></div>
+        <div class="rating-option"><input type="radio" name="overall" value="4"><span>4</span></div>
+        <div class="rating-option"><input type="radio" name="overall" value="5"><span>5</span></div>
+      </div>
+      <span class="rating-label right">Thriving</span>
+    </div>
+  </div>
+
+  <div class="prompt">How is your soul? Are you spiritually nourished, or running dry?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">Are you finding rhythms of rest here in Germany? What does that look like?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <hr class="divider">
+
+  <!-- PART 2 -->
+  <div class="part-bar indigo">
+    <div class="part-bar-accent"></div>
+    <div class="part-bar-body">
+      <div class="part-bar-label">Part 2</div>
+      <div class="part-bar-title">You & the Team</div>
+    </div>
+  </div>
+  <div class="section-note">How are you experiencing life with your teammates? Both the good and the hard.</div>
+
+  <div class="prompt">What has been most encouraging or strengthening about your team in this season?</div>
+  <div class="sub-prompt">What moments, conversations, or dynamics have built you up?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">How would you describe the culture of the team right now?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">On a scale of 1–5, how connected do you feel to your teammates?</div>
+  <div class="rating-wrap">
+    <div class="rating-row">
+      <span class="rating-label">Isolated / disconnected</span>
+      <div class="rating-options">
+        <div class="rating-option"><input type="radio" name="connected" value="1"><span>1</span></div>
+        <div class="rating-option"><input type="radio" name="connected" value="2"><span>2</span></div>
+        <div class="rating-option"><input type="radio" name="connected" value="3"><span>3</span></div>
+        <div class="rating-option"><input type="radio" name="connected" value="4"><span>4</span></div>
+        <div class="rating-option"><input type="radio" name="connected" value="5"><span>5</span></div>
+      </div>
+      <span class="rating-label right">Deeply connected</span>
+    </div>
+  </div>
+
+  <div class="prompt">Do you feel like you belong — that people know you, not just what you do?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">Is there anything about the team dynamics that has felt difficult or unresolved?</div>
+  <div class="sub-prompt">You don't have to name names. Just explore what's sitting with you.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">Is there a teammate you feel particularly grateful for this season? Why?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <hr class="divider">
+
+  <!-- PART 3 -->
+  <div class="part-bar terracotta">
+    <div class="part-bar-accent"></div>
+    <div class="part-bar-body">
+      <div class="part-bar-label">Part 3</div>
+      <div class="part-bar-title">Your Role & Fit</div>
+    </div>
+  </div>
+  <div class="section-note">Are you in the right seat? Let's think through this honestly.</div>
+
+  <div class="prompt">What parts of your role feel most natural, energizing, or meaningful?</div>
+  <div class="sub-prompt">What do you do that doesn't feel like work because you love it?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">How would you describe your current role? Does the description match reality?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">On a scale of 1–5, how well does your current role fit you?</div>
+  <div class="rating-wrap">
+    <div class="rating-row">
+      <span class="rating-label">Draining / poor fit</span>
+      <div class="rating-options">
+        <div class="rating-option"><input type="radio" name="rolefit" value="1"><span>1</span></div>
+        <div class="rating-option"><input type="radio" name="rolefit" value="2"><span>2</span></div>
+        <div class="rating-option"><input type="radio" name="rolefit" value="3"><span>3</span></div>
+        <div class="rating-option"><input type="radio" name="rolefit" value="4"><span>4</span></div>
+        <div class="rating-option"><input type="radio" name="rolefit" value="5"><span>5</span></div>
+      </div>
+      <span class="rating-label right">Energizing / great fit</span>
+    </div>
+  </div>
+
+  <div class="prompt">What parts consistently feel like a poor fit or drain you?</div>
+  <div class="sub-prompt">Remember: some difficulty is growth. What feels like genuine misalignment vs. healthy stretching?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">Are there gifts or strengths you feel are underused right now?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">If you could change one thing about your role, what would it be?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <hr class="divider">
+
+  <!-- PART 4 -->
+  <div class="part-bar taupe">
+    <div class="part-bar-accent"></div>
+    <div class="part-bar-body">
+      <div class="part-bar-label">Part 4</div>
+      <div class="part-bar-title">Your Commitment & Engagement</div>
+    </div>
+  </div>
+  <div class="section-note">This section is about your sense of engagement within your time here — wherever you are in your term.</div>
+
+  <div class="skip-box">
+    <strong>↷ Note:</strong> If you have a committed end date and plan to return home at that time, you can skip some of the questions below — or adapt them to reflect where you are in your current term. The main question here is: how engaged and purposeful does this season feel to you right now?
+  </div>
+
+  <div class="prompt">How engaged and purposeful does your work feel within your current commitment?</div>
+  <div class="rating-wrap">
+    <div class="rating-row">
+      <span class="rating-label">Going through motions</span>
+      <div class="rating-options">
+        <div class="rating-option"><input type="radio" name="engaged" value="1"><span>1</span></div>
+        <div class="rating-option"><input type="radio" name="engaged" value="2"><span>2</span></div>
+        <div class="rating-option"><input type="radio" name="engaged" value="3"><span>3</span></div>
+        <div class="rating-option"><input type="radio" name="engaged" value="4"><span>4</span></div>
+        <div class="rating-option"><input type="radio" name="engaged" value="5"><span>5</span></div>
+      </div>
+      <span class="rating-label right">Fully engaged</span>
+    </div>
+  </div>
+
+  <div class="prompt">Has anything shifted in your sense of calling or direction in the last 6 months?</div>
+  <div class="sub-prompt">This could be renewed clarity, new questions, or a shift in what you feel drawn toward.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">Is there anything that would make your time here more sustainable or meaningful going forward?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">(Optional — for those without a fixed end date) How long do you currently sense you're called to stay?</div>
+  <div class="sub-prompt">Even a rough sense is helpful. It's okay to be uncertain.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <hr class="divider">
+
+  <!-- PART 5 -->
+  <div class="part-bar indigo">
+    <div class="part-bar-accent"></div>
+    <div class="part-bar-body">
+      <div class="part-bar-label">Part 5</div>
+      <div class="part-bar-title">What Do You Need?</div>
+    </div>
+  </div>
+  <div class="section-note">This is your chance to ask for what you actually need. Be specific where you can.</div>
+
+  <div class="prompt">What is something leadership has done well that you want to name and affirm?</div>
+  <div class="sub-prompt">Positive feedback matters too — share it if it's true.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">What is one thing leadership could do differently that would make a real difference for you?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">Do you feel adequately equipped and supported for your work? Where are the gaps?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">Have there been moments where you felt unseen or unsupported? Can you describe that?</div>
+  <div class="sub-prompt">This is safe to share. Leadership wants to know.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">Would you find it valuable to connect with a counselor, spiritual director, or coach?</div>
+  <div class="sub-prompt">If yes — leadership would love to help make that happen. It's not weakness; it's good stewardship.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">How is your fundraising support level? Any financial stressors we should know about?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <hr class="divider">
+
+  <!-- PART 6 -->
+  <div class="part-bar terracotta">
+    <div class="part-bar-accent"></div>
+    <div class="part-bar-body">
+      <div class="part-bar-label">Part 6</div>
+      <div class="part-bar-title">Vision & Calling</div>
+    </div>
+  </div>
+  <div class="section-note">We want your 'why' to stay alive. Let's make sure it is.</div>
+
+  <div class="prompt">What is something God has done in or through you this season that you want to remember?</div>
+  <div class="sub-prompt">A moment, a breakthrough, an answered prayer, a shift you didn't expect.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">When you think about why you came here — what was your original vision or calling? Does it still feel alive?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">On a scale of 1–5, how clear and alive does your sense of calling feel right now?</div>
+  <div class="rating-wrap">
+    <div class="rating-row">
+      <span class="rating-label">Foggy / burned out</span>
+      <div class="rating-options">
+        <div class="rating-option"><input type="radio" name="calling" value="1"><span>1</span></div>
+        <div class="rating-option"><input type="radio" name="calling" value="2"><span>2</span></div>
+        <div class="rating-option"><input type="radio" name="calling" value="3"><span>3</span></div>
+        <div class="rating-option"><input type="radio" name="calling" value="4"><span>4</span></div>
+        <div class="rating-option"><input type="radio" name="calling" value="5"><span>5</span></div>
+      </div>
+      <span class="rating-label right">Clear and alive</span>
+    </div>
+  </div>
+
+  <div class="prompt">When do you feel most alive in this work? Describe a recent moment.</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">Are there dreams or ideas you haven't had space to explore yet?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <div class="prompt">What would re-ignite your sense of vision if it's feeling flat?</div>
+  <input type="text" class="write-line" placeholder="Write here...">
+  <input type="text" class="write-line" placeholder="">
+
+  <hr class="divider">
+
+  <!-- CLOSING -->
+  <div class="closing-box">
+    <div class="closing-header">Before You Meet</div>
+    <div class="closing-body">
+      <p style="font-size:10.5px; color:var(--dark); margin-bottom:14px;">Use these three prompts to help you walk into your meeting knowing what matters most to you right now.</p>
+
+      <div class="prompt" style="margin-top:0;">One thing I most want leadership to know this season:</div>
+      <input type="text" class="write-line" placeholder="Write here...">
+      <input type="text" class="write-line" placeholder="">
+
+      <div class="prompt">One thing I most need from leadership right now:</div>
+      <input type="text" class="write-line" placeholder="Write here...">
+      <input type="text" class="write-line" placeholder="">
+
+      <div class="prompt">One thing I want to commit to in the next 6 months:</div>
+      <input type="text" class="write-line" placeholder="Write here...">
+      <input type="text" class="write-line" placeholder="">
+
+      <div class="closing-final">You are seen, valued, and not alone in this. Thank you for being here.</div>
+    </div>
+  </div>
+
+</div><!-- end page -->
+
+</body>
+</html>
