@@ -62,6 +62,31 @@
       color: transparent !important;
       opacity: 0 !important;
     }
+    /* Screen uses single-line + overflow hidden; print fonts/width differ and clip text — show full content */
+    textarea.note-line {
+      white-space: pre-wrap !important;
+      overflow: visible !important;
+      height: auto !important;
+      min-height: 1.5em !important;
+      max-height: none !important;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+    }
+    textarea.note-area {
+      overflow: visible !important;
+      height: auto !important;
+      min-height: 5em !important;
+      max-height: none !important;
+      white-space: pre-wrap !important;
+    }
+    .action-line {
+      flex-wrap: wrap !important;
+    }
+    input.action-input {
+      flex: 1 1 100% !important;
+      min-width: 0 !important;
+      overflow: visible !important;
+    }
     .section-bar, .tip-header, .skip-box, .action-header {
       -webkit-print-color-adjust: exact;
       print-color-adjust: exact;
